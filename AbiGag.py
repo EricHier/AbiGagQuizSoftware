@@ -65,13 +65,16 @@ loginBlau = -1
 
 def addText(text, color, size, pos, vonLinks):
     ##Fügt einen Text ein
+    
     surf = pygame.font.Font("freesansbold.ttf", size).render(text, True, color)
     rect = surf.get_rect()
     rect.top = pos[1]
+    
     if vonLinks:
-        rect.left = pos[0];
+        rect.left = pos[0]; 
     else:
         rect.right = pos[0];
+
     display.blit(surf, rect)
 
 def onLogin(playerID, answerID):
@@ -180,13 +183,12 @@ def render():
     if not buzzer:
         if zustand == "frage":
             display.blit(bilder[aktuelleFrage][0], (0, 0))
-            if not loginRot == -1:
-                pygame.draw.rect(display, red, [0, 200, 100, 100])
-            if not loginBlau == -1:
-                pygame.draw.rect(display, blue, [1820, 200, 100, 100])
             addText(str(punkteRot), red, 100, (50, 50), True)
             addText(str(punkteBlau), blue, 100, (1870, 50), False)
-            
+            if not loginRot == -1:
+                pygame.draw.circle(display, red, [0, 250], 60)
+            if not loginBlau == -1:
+                pygame.draw.circle(display, blue, [1920, 250], 60) ## 123 px durchmesser
             
         elif zustand == "einloggung":
             display.blit(bilder[aktuelleFrage][0], (0, 0))
@@ -194,8 +196,6 @@ def render():
             display.blit(antwortBildB[int(loginBlau)], (0, 0))
             addText(str(punkteRot), red, 100, (50, 50), True)
             addText(str(punkteBlau), blue, 100, (1870, 50), False)
-
-            
             
         elif zustand == "loesung":
             display.blit(bilder[aktuelleFrage][1], (0, 0))
@@ -206,8 +206,6 @@ def render():
 
         elif zustand == "vorschau":
             display.blit(vorschaubild, (0, 0))
-
-        
 
     else:
         if loginBlau == 0 and zustand == "frage":
@@ -275,9 +273,6 @@ def update():
 
     global zustand
     if not loginRot == -1 and not loginBlau == -1 and zustand == "frage" and not buzzer:
-        pygame.draw.rect(display, red, [0, 200, 100, 100])
-        pygame.draw.rect(display, blue, [1820, 200, 100, 100])
-        pygame.display.update()
         time.sleep(1)
         zustand = "einloggung"
 
@@ -290,6 +285,3 @@ neuesSpiel(1)
 while True:
     update()
     render()
-    
-    
-    
