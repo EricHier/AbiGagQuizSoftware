@@ -63,11 +63,15 @@ punkteBlau = 0
 loginRot = -1
 loginBlau = -1
 
-def addText(text, color, size, pos):
+def addText(text, color, size, pos, vonLinks):
     ##Fügt einen Text ein
     surf = pygame.font.Font("freesansbold.ttf", size).render(text, True, color)
     rect = surf.get_rect()
-    rect.center = pos
+    rect.top = pos[1]
+    if vonLinks:
+        rect.left = pos[0];
+    else:
+        rect.right = pos[0];
     display.blit(surf, rect)
 
 def onLogin(playerID, answerID):
@@ -150,11 +154,11 @@ def neuesSpiel(nr):
     global antworten
     global buzzer
     if nr == 1:
-        antworten = [3, 3]
+        antworten = [0, 2, 0, 3, 3, 0, 1, 1, 3, 3]
         buzzer = False
     elif nr == 2:
-        antworten = [3, 2]
-        buzzer = True
+        antworten = [0, 2, 2, 3, 1, 0, 1, 2, 2]
+        buzzer = False
 
     global bilder
     bilder = []
@@ -180,16 +184,16 @@ def render():
                 pygame.draw.rect(display, red, [0, 200, 100, 100])
             if not loginBlau == -1:
                 pygame.draw.rect(display, blue, [1820, 200, 100, 100])
-            addText(str(punkteRot), red, 100, (50, 50))
-            addText(str(punkteBlau), blue, 100, (1720, 50))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
             
             
         elif zustand == "einloggung":
             display.blit(bilder[aktuelleFrage][0], (0, 0))
             display.blit(antwortBildR[int(loginRot)], (0, 0))
             display.blit(antwortBildB[int(loginBlau)], (0, 0))
-            addText(str(punkteRot), red, 100, (50, 50))
-            addText(str(punkteBlau), blue, 100, (1720, 50))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
 
             
             
@@ -197,8 +201,8 @@ def render():
             display.blit(bilder[aktuelleFrage][1], (0, 0))
             display.blit(antwortBildR[int(loginRot)], (0, 0))
             display.blit(antwortBildB[int(loginBlau)], (0, 0))
-            addText(str(punkteRot), red, 100, (50, 50))
-            addText(str(punkteBlau), blue, 100, (1720, 50))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
 
         elif zustand == "vorschau":
             display.blit(vorschaubild, (0, 0))
@@ -209,8 +213,8 @@ def render():
         if loginBlau == 0 and zustand == "frage":
             display.fill(blue)
             display.blit(bilder[aktuelleFrage][0], (0, 0))
-            addText(str(punkteRot), white, 100, (50, 50))
-            addText(str(punkteBlau), white, 100, (1720, 50))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
             pygame.display.update()
             sound.play()
             time.sleep(5)
@@ -220,8 +224,8 @@ def render():
         elif loginRot == 0 and zustand == "frage":
             display.fill(red)
             display.blit(bilder[aktuelleFrage][0], (0, 0))
-            addText(str(punkteRot), white, 100, (50, 50))
-            addText(str(punkteBlau), white, 100, (1720, 50))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
             pygame.display.update()
             sound.play()
             time.sleep(5)
@@ -238,8 +242,8 @@ def render():
         elif zustand == "vorschau":
             display.blit(vorschaubild, (0, 0))
 
-        addText(str(punkteRot), red, 100, (50, 50))
-        addText(str(punkteBlau), blue, 100, (1720, 50))
+        addText(str(punkteRot), red, 100, (50, 50), True)
+        addText(str(punkteBlau), blue, 100, (1870, 50), False)
     
     pygame.display.update()
 
@@ -266,10 +270,6 @@ def update():
                 neuesSpiel(1)
             elif event.key == pygame.K_2:
                 neuesSpiel(2)
-            elif event.key == pygame.K_3:
-                neuesSpiel(3)
-            elif event.key == pygame.K_4:
-                neuesSpiel(4)
             
 
 
