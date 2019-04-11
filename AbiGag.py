@@ -13,7 +13,6 @@ black = (0,0,0)
 red = (255, 80, 80)
 blue = (0, 153, 255)
 
-
 ##Pygame Setup
 pygame.init()
 
@@ -38,10 +37,8 @@ antwortBildB = ["", "", "", ""]
 for i in range(4):
     antwortBildB[i] = pygame.image.load("Tokens/BlauAntwort" + str(i) + ".png")
 
-
 ##Import sound
 sound = pygame.mixer.Sound('Tokens/buzzer.wav')
-
 
 ##Variablen
 aktuelleFrage = 0
