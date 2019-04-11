@@ -79,7 +79,7 @@ def addText(text, color, size, pos, vonLinks):
 
 def onLogin(playerID, answerID):
     global zustand
-    if zustand == "frage":
+    if zustand == "frage" or buzzer:
         global loginRot
         global loginBlau
         if int(playerID) == 0:
@@ -105,6 +105,7 @@ def vor():
     global punkteBlau
     global punkteRot
     global buzzer
+    global spiel
     if zustand == "einloggung":
         zustand = "loesung"
         if loginRot == antworten[aktuelleFrage] and not buzzer:
@@ -116,16 +117,17 @@ def vor():
             loginRot = -1
             loginBlau = -1
             zustand = "frage"
-            aktuelleFrage += 1
+            aktuelleFrage = aktuelleFrage + 1 if not buzzer else aktuelleFrage
     elif zustand == "vorschau":
-        zustand = "frage"
-        aktuelleFrage = 0
+        if spiel == 6 or spiel == 7:
+            zustand = "frage"
+            aktuelleFrage = 0
 
 def zurueck():
     global zustand
     global aktuelleFrage
     if zustand == "loesung":
-        zustand = "einloggung" if not buzzer else "frage"
+        zustand = "einloggung"
     elif zustand == "einloggung":
         zustand = "frage"
         global loginRot
@@ -157,11 +159,32 @@ def neuesSpiel(nr):
     global antworten
     global buzzer
     if nr == 1:
-        antworten = [0, 2, 0, 3, 3, 0, 1, 1, 3, 3]
+        antworten = []
         buzzer = False
     elif nr == 2:
+        antworten = []
+        buzzer = False
+    elif nr == 3:
+        antworten = []
+        buzzer = False
+    elif nr == 4:
+        antworten = []
+        buzzer = True
+    elif nr == 5:
+        antworten = []
+        buzzer = False
+    elif nr == 6:
+        antworten = [0, 2, 0, 3, 3, 0, 1, 1, 3, 3]
+        buzzer = False
+    elif nr == 7:
         antworten = [0, 2, 2, 3, 1, 0, 1, 2, 2]
         buzzer = False
+    elif nr == 8:
+        antworten = []
+        buzzer = False
+    elif nr == 9:
+        antworten = []
+        buzzer = False    
 
     global bilder
     bilder = []
@@ -208,40 +231,29 @@ def render():
             display.blit(vorschaubild, (0, 0))
 
     else:
-        if loginBlau == 0 and zustand == "frage":
+        if loginBlau == 0:
             display.fill(blue)
-            display.blit(bilder[aktuelleFrage][0], (0, 0))
-            addText(str(punkteRot), red, 100, (50, 50), True)
-            addText(str(punkteBlau), blue, 100, (1870, 50), False)
+            addText(str(punkteRot), white, 100, (50, 50), True)
+            addText(str(punkteBlau), white, 100, (1870, 50), False)
             pygame.display.update()
             sound.play()
             time.sleep(5)
-            zustand = "loesung"
             loginBlau = -1
             loginRot = -1
-        elif loginRot == 0 and zustand == "frage":
+        elif loginRot == 0:
             display.fill(red)
-            display.blit(bilder[aktuelleFrage][0], (0, 0))
-            addText(str(punkteRot), red, 100, (50, 50), True)
-            addText(str(punkteBlau), blue, 100, (1870, 50), False)
+            addText(str(punkteRot), white, 100, (50, 50), True)
+            addText(str(punkteBlau), white, 100, (1870, 50), False)
             pygame.display.update()
             sound.play()
             time.sleep(5)
-            zustand = "loesung"
             loginRot = -1
             loginBlau = -1
         else:
-            display.fill(black)
-
-        if zustand == "frage":
-            display.blit(bilder[aktuelleFrage][0], (0, 0))
-        elif zustand == "loesung":
-            display.blit(bilder[aktuelleFrage][1], (0, 0))
-        elif zustand == "vorschau":
             display.blit(vorschaubild, (0, 0))
+            addText(str(punkteRot), red, 100, (50, 50), True)
+            addText(str(punkteBlau), blue, 100, (1870, 50), False)
 
-        addText(str(punkteRot), red, 100, (50, 50), True)
-        addText(str(punkteBlau), blue, 100, (1870, 50), False)
     
     pygame.display.update()
 
@@ -268,14 +280,25 @@ def update():
                 neuesSpiel(1)
             elif event.key == pygame.K_2:
                 neuesSpiel(2)
+            elif event.key == pygame.K_3:
+                neuesSpiel(3)
+            elif event.key == pygame.K_4:
+                neuesSpiel(4)
+            elif event.key == pygame.K_5:
+                neuesSpiel(5)
+            elif event.key == pygame.K_6:
+                neuesSpiel(6)
+            elif event.key == pygame.K_7:
+                neuesSpiel(7)
+            elif event.key == pygame.K_:
+                neuesSpiel(8)
+            elif event.key == pygame.K_9:
+                neuesSpiel(9)
             
-
-
     global zustand
     if not loginRot == -1 and not loginBlau == -1 and zustand == "frage" and not buzzer:
         time.sleep(1)
         zustand = "einloggung"
-
 
 t = Thread(target=empfang, args=())
 t.start()
